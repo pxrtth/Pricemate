@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pricemate made shopping easy</title>
+    <style>
+        body {
+            background-image: url('images/bg.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+
+        .home {
+            text-align: center;
+            position: fixed;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input.MyBtn {
+            height: 50px;
+            width: 500px;
+            font-family: arial;
+            font-size: 25px;
+            background: rgb(87, 130, 230);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            border: none;
+            padding-right: 30px;
+            padding-left: 30px;
+            margin-top: 10px;
+        }
+
+        input.MyBtn::placeholder {
+            color: white;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        input.MyBtn:hover {
+            color: black;
+            background: rgb(212, 225, 255);
+        }
+
+        input.MyBtn:focus::placeholder {
+            opacity: 0;
+            color: black;
+            transition: 0.1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="home">
+        <g class="home">
+            <img class="logo" src="images/Logo.png" style="width: 412px; height:92px;">
+            <form action="Search.html" onsubmit="return handleSearch()">
+                <input class="MyBtn" placeholder="Search any product..." type="text" id="searchInput">
+            </form>
+        </g>
+    </div>
+
+    <script>
+        // Function to set the search value in localStorage
+        function handleSearch() {
+            var searchValue = document.getElementById('searchInput').value;
+            localStorage.setItem('searchValue', searchValue);
+            return true; // Continue with form submission
+        }
+    </script>
+</body>
+</html>

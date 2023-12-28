@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pricemate Search</title>
+    <style>
+        body {
+            background-image: url('images/bg.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+            margin: 0; /* Remove default margin */
+        }
+
+        input.MyBtn {
+            height: 45px;
+            width: 700px;
+            font-family: arial;
+            font-size: 25px;
+            background: rgb(87, 130, 230);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            border: none;
+            padding-right: 30px;
+            padding-left: 30px;
+        }
+
+        input.MyBtn::placeholder {
+            color: white;
+            opacity: 0.5;
+        }
+
+        input.MyBtn:hover {
+            color: black;
+            background: rgb(212, 225, 255);
+        }
+
+        input.MyBtn:focus::placeholder {
+            transition: 0.1s;
+        }
+
+        .section1 {
+            height: fit-content;
+            padding: 10px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;/
+        }
+
+        .search-section {
+            display: flex;
+            align-items: center; /* Vertical centering within .search-section */
+        }
+
+        .logo {
+            width: 144px;
+            height: 32px;
+            margin-right: 10px; /* Adjust margin as needed */
+        }
+
+        section.SearchResult {
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top: 50px;
+        }
+
+        div.SearchResult {
+            display: flex;
+        }
+
+        .ValueBox {
+            margin: auto;
+            height: 400px;
+            width: 250px;
+            background-color: aliceblue;
+            border-radius: 25px;
+            text-align: center;
+        }
+        img.SearchImg{
+            height: 225px;
+            width: 225px;
+            padding: 10px;
+            border-radius: 30px;
+        }
+        p{
+            text-align: left;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+    </style>
+</head>
+<body>
+    <section class="section1">
+        <div class="search-section">
+            <img class="logo" src="images/Logo.png" alt="Logo">
+            <form action="Search.html" onsubmit="return handleSearch()">
+                <input class="MyBtn" value="" type="text" id="searchInput">
+            </form>
+        </div>
+    </section>
+    <section class="SearchResult">
+        <div class="SearchResult">
+            <div class="ValueBox">
+                <img class="SearchImg" src="" alt="Image not Available" id="SearchImg1">
+                <p class="ProductName" id="ProductName1"></p>
+                <p class="ProductPrice" id="ProductPrice1"></p>
+                <p class="ProductWebsite" id="ProductWebsite1"></p>
+            </div>
+            <div class="ValueBox">
+                <img class="SearchImg" src="" alt="Image not Available" id="SearchImg2">
+                <p class="ProductName" id="ProductName2"></p>
+                <p class="ProductPrice" id="ProductPrice2"></p>
+                <p class="ProductWebsite" id="ProductWebsite2"></p>
+            </div>
+            <div class="ValueBox">
+                <img class="SearchImg" src="" alt="Image not Available" id="SearchImg3">
+                <p class="ProductName" id="ProductName3"></p>
+                <p class="ProductPrice" id="ProductPrice3"></p>
+                <p class="ProductWebsite" id="ProductWebsite3"></p>
+            </div>
+            <div class="ValueBox">
+                <img class="SearchImg" src="" alt="Image not Available" id="SearchImg4">
+                <p class="ProductName" id="ProductName4"></p>
+                <p class="ProductPrice" id="ProductPrice4"></p>
+                <p class="ProductWebsite" id="ProductWebsite4"></p>
+            </div>
+            <div class="ValueBox">
+                <img class="SearchImg" src="" alt="Image not Available" id="SearchImg5">
+                <p class="ProductName" id="ProductName5"></p>
+                <p class="ProductPrice" id="ProductPrice5"></p>
+                <p class="ProductWebsite" id="ProductWebsite5"></p>
+            </div>
+           
+        </div>
+    </section>
+
+    <script>
+        // Load JSON data from data.json file
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                // Get the search value from localStorage
+                var searchValue = localStorage.getItem('searchValue') || '';
+
+                // Set the search value as the placeholder
+                document.getElementById('searchInput').value = searchValue;
+
+                // Function to filter products based on search value
+                function filterProducts(products) {
+                    return products.filter(product => product.name.toLowerCase().includes(searchValue.toLowerCase()));
+                }
+
+                // Get the filtered products based on the search value
+                var filteredIPhoneProducts = filterProducts(data.products.iphone);
+                var filteredMacbookProducts = filterProducts(data.products.macbook);
+
+                // Function to update the product information in the HTML
+                function updateProductInfo(products, prefix) {
+                    for (var i = 0; i < 5; i++) {
+                        var product = products[i];
+                        var imgElement = document.getElementById(prefix + 'SearchImg' + (i + 1));
+                        var nameElement = document.getElementById(prefix + 'ProductName' + (i + 1));
+                        var priceElement = document.getElementById(prefix + 'ProductPrice' + (i + 1));
+                        var websiteElement = document.getElementById(prefix + 'ProductWebsite' + (i + 1));
+
+                        imgElement.src = product.image || 'images/default_image.jpg'; // Use a default image if image is not available
+                        nameElement.textContent = 'Name: ' + product.name;
+                        priceElement.textContent = 'Price: ' + product.price;
+                        websiteElement.innerHTML = 'Website: <a href="' + product.website + '" target="_blank">' + product.website + '</a>';
+                    }
+                }
+
+                // Update the product information on the page
+                updateProductInfo(filteredIPhoneProducts, 'iphone');
+                updateProductInfo(filteredMacbookProducts, 'macbook');
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        // Your existing script
+        // Get the search value from localStorage
+        var searchValue = localStorage.getItem('searchValue') || '';
+
+        // Set the search value as the placeholder
+        document.getElementById('searchInput').value = searchValue;
+
+        function handleSearch() {
+            var searchValue = document.getElementById('searchInput').value;
+            localStorage.setItem('searchValue', searchValue);
+            return true; // Continue with form submission
+        }
+        localStorage.removeItem('searchValue');
+    </script>
+</body>
+</html>
